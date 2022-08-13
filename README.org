@@ -1,4 +1,4 @@
-# 10 Design Patterns
+#+TITLE: 10 Design Patterns
 A study on 10 design patterns using Typescript
 
 * Creational
