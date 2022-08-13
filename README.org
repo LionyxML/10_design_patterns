@@ -1,0 +1,235 @@
+# 10 Design Patterns
+A study on 10 design patterns using Typescript
+
+* Creational
+How objects are created
+** Singleton
+A type of object that can only be instantiated **once**.
+#+BEGIN_SRC typescript
+  class Settings {
+    static instance: Settings;
+
+
+    // prevent new with private constructor
+    private constructor() {
+
+    }
+
+    static getInstance(): Settings {
+      if(!Settings.instance) {
+	Settings.instance = new Settings();
+      }
+
+      return Settings.instance;
+    }
+  }
+
+  // const settings = new Settings()
+  const settings = Settings.getInstance();
+#+END_SRC
+
+Obs: in javascript we have object literals and also the concept of
+global data and objects are passed around by reference. We get
+basically the same caracteristics of this pattern by simply creating a
+global object, such as:
+
+#+BEGIN_SRC typescript
+  const settings = {
+    dark: "true"
+  }
+#+END_SRC
+
+The pattern it self is just really extra boilerplate we don't need.
+Another history complete if we we're using C++.
+
+** Prototype
+Just a fancy word for **clone**.
+
+The problem it aims to solve is Inheritance hell, like:
+#+BEGIN_SRC typescript
+  class Animal {}
+
+  class Dog extends Animal {}
+  class Cat extends Animal {}
+  // ...
+#+END_SRC
+
+Prototype pattern is an alternative way to implement inheritance, but
+not by classes.
+
+Intead it inherites by objects that have already been created.
+
+#+BEGIN_SRC typescript
+  const zombie = {
+    eatBrains() {
+      return "I like brains";
+    }
+  }
+
+  const chat = Object.create(zombie, {name: { value: "chad" }});
+
+  console.log(chad); // {name: 'chad'}   where is the method?
+
+  chad.eatBrains(); // "I like brains"  js goes up the prototype chain
+
+  chad.__proto__; // gets the prototype, but not the modern best pratice
+  Object.getPrototypeOf(chad);
+#+END_SRC
+
+When it comes to classes in JS, prototype reffers to its constructor.
+That means we can extend a class with aditional functions if we want
+to. But this is also generally considerated a bad pratice.
+
+#+BEGIN_SRC typescript
+  Array.prototype.bad = function() {
+    console.log("im bad");
+  }
+
+  [].bad() // "im bad"
+#+END_SRC
+
+** Builder
+Imagine you're running a hot-dog stand and when a custumer asks you an
+order they need to tell you everything they want in their sandwich in
+the constructor.
+
+#+BEGIN_SRC typescript
+  class HotDog {
+    constructor (
+      public bun: string,
+      public ketchup: boolean,
+      public mustard: boolean,
+      public kraut: boolean
+    ) { }
+  }
+
+  new HotDog('wheat', flase, true, true);
+#+END_SRC
+
+It works but it gets hard to follow e we might want to deffer one
+step or other for later.
+
+An alternative is to build the object step by step using methods and
+not the constructor. This is the builder pattern.
+
+#+BEGIN_SRC typescript
+  class HotDog {
+    constructor (
+      public bun: string,
+      public ketchup?: boolean,
+      public mustard?: boolean,
+      public kraut?: boolean
+    ) {}
+
+    addKetchup() {
+      this.ketchup = true;
+      return this;
+    }
+
+    addMustard() {
+      this.mustard = true;
+      return this;
+    }
+
+    addKraut() {
+      this.kraut = true;
+      return this;
+    }
+  }
+
+  const myLunch = new HotDog('gluten free')
+
+  myLunch
+    .addKetchup()
+    .addMustard()
+    .addKraut();  // wow, it allows method chaining!
+#+END_SRC
+
+** Factory
+Insted of using the `new` keyword to instantiate an object you use a
+function or method to do it for you.
+
+Imagine you're making a cross platform app that runs on Androind and
+Ios.
+
+Without factory:
+#+BEGIN_SRC typescript
+  class IOSButton { }
+  class AndroidButton { }
+
+  const button1 = os === "ios" ? new IOSButton() : new AndroidButton();
+  const button2 = os === "ios" ? new IOSButton() : new AndroidButton();  
+#+END_SRC
+
+Now with the factory:
+#+BEGIN_SRC typescript
+  class ButtonFactory {
+    createButton(os: string): IOSButton | AndroidButton {
+      if (os === "ios") {
+	return new IOSButton();
+      } else {
+	return new AndroiButton();
+      }
+    }
+  }
+
+  const factory = new ButtonFactory();  // << this is the factory
+  const btn1 = factory.createButton(os);
+  const btn2 = factory.createButton(os); // smart object creation
+#+END_SRC
+
+* Structural
+How objects relate to each other
+** Facade
+Is basically a simplified API to hide another low level details in
+your codebase
+
+#+BEGIN_SRC typescript
+  class PlumbingSystem {
+    // Low level access to plumbing system
+    setPressure(v: number) {}
+    turnOn() {}
+    turnOff() {}
+  }
+
+  class ElectricalSystem {
+    // Low level acces to electrical system
+    setVoltage(v: number) {}
+    turnOn() {}
+    turnOff() {}
+  }
+
+  class House {  // Simplified wrapper
+    private plumbing = new PlumbingSystem();
+    private electrical = new ElectricalSystem();
+
+    public turnOnSytems() {
+      this.electrical.setVoltage(120);
+      this.electrical.turnOn();
+      this.plumbing.setPressure(500);
+      this.plumbing.turnOn();
+    }
+
+    public turnOffSytems() {
+      this.electrical.turnOff();
+      this.plumbing.turnOff();
+    }
+  }
+
+  const client = new House();
+  client.turnOnSystems();
+  client.turnOffSystems();
+#+END_SRC
+
+Almost Every package on JS is a facade, like jQuery.
+
+** Proxy
+...
+* Behavioral
+How objects communicate with each other
+** Iterator
+** Observer
+** Mediator
+** State
+
+
