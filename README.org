@@ -1,4 +1,6 @@
 #+TITLE: 10 Design Patterns
+#+AUTHOR: Rahul M. Juliato
+
 A study on 10 design patterns using Typescript
 
 * Creational
@@ -181,7 +183,7 @@ Now with the factory:
 * Structural
 How objects relate to each other
 ** Facade
-Is basically a simplified API to hide another low level details in
+Facade is basically a simplified API to hide another low level details in
 your codebase
 
 #+BEGIN_SRC typescript
