@@ -306,6 +306,35 @@ determines how to get from the beginning to the end.
 
 It is a pull-based systems.
 ** Observer
+A push-base system.
+
+The observer pattern allows many objects to subscribe to events
+broacasted by another object.
+
+It is a `one-to-many` relationship.
+
+It is used in places like `firebase` where when your data is changed
+on the saver, the clients subscribed to it are automatically updated
+with the latest changes.
+
+#+BEGIN_SRC typescript
+  import { Subject } from "rxjs";
+
+  const news = new Subject();
+
+  const tv1 = news.subscribe( v => console.log(v + "via net tv"));
+  const tv2 = news.subscribe( v => console.log(v + "via another tv"));
+  const tv3 = news.subscribe( v => console.log(v + "via even another tv"));
+
+
+  // to push a new value to the subject
+  news.next("Breaking news: ");
+  news.next("The war is over ");
+#+END_SRC
+
+You can think of it like a for loop that unfolds over the dimention of
+time.
+
 ** Mediator
 ** State
 
