@@ -336,6 +336,59 @@ You can think of it like a for loop that unfolds over the dimention of
 time.
 
 ** Mediator
+A mediator is like a middleman or a broker.
+
+We have a many to many relationship.
+
+#+BEGIN_SRC typescript
+  class Airplane {
+
+    }
+
+  class Runway {
+    clear: boolean;
+    }
+
+  const runway25A = new Runway();
+  const runway25B = new Runway();
+  const runway7 = new Runway();
+  const a = new Airplane();
+  const b = new Airplane();
+  const c = new Airplane();
+
+
+  // In order to provide coordination and communication
+
+  class Tower {
+    clearForLanding(runway: Runway, plane: Airplane) {
+      if (runway.clear) {
+	console.log(`Plane ${plane} is clear for landing`);
+      }
+    }
+  }
+#+END_SRC
+
+A more practical example. In the express JS web framework, there's a
+middleware system.
+
+#+BEGIN_SRC typescript
+  import express from "express";
+  const app = express();
+
+  function logger(req, res, next) {
+    console.log("Request Type: ", req.method)
+    next()
+  }
+
+  app.use(logger);
+
+  app.get("/", (req, res) => {
+    res.send("Hello World");
+  });
+#+END_SRC
+
+It provides separation of concerns and eliminates code duplication.
+
 ** State
 
 
