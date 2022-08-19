@@ -226,7 +226,40 @@ your codebase
 Almost Every package on JS is a facade, like jQuery.
 
 ** Proxy
-...
+A fancy word for substitute.
+
+You can replace a target object with a proxy.
+
+A greate case study would be reactivity system in Vue JS.
+
+You create data, but the framework itself needs a wai of intercept
+that data and update the UI whenever the data changes.
+
+The way Vue does is substituting the original object with a proxy.
+
+#+BEGIN_SRC typescript
+  const original = { name: "Jeff" };
+
+  const reactive = new Proxy(original, {
+    get(target,key) {
+      console.log("Tracking: ", key);
+      return target[key];
+    },
+    set(target, key, value) {
+      console.log("updating UI...');
+      return Reflect.set(target, key, value);
+    },
+  });
+
+
+  reactive.name;         // logs: 'tracking name'
+  reactive.name = "bob"  // logs: 'updating the ui'
+
+#+END_SRC
+
+Proxys are also used when you have very large objects that would be
+too expensive to duplicate in memory.
+
 * Behavioral
 How objects communicate with each other
 ** Iterator
