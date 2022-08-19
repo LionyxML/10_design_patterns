@@ -263,6 +263,48 @@ too expensive to duplicate in memory.
 * Behavioral
 How objects communicate with each other
 ** Iterator
+Allows you to triverse through a collection of objects.
+
+Modern languages already provides abstractions for the iterators, like:
+
+#+BEGIN_SRC typescript
+  const cart = ["apple", "banana", "orange"];
+
+  for (const item of cart) {
+    console.log(item);
+  }
+#+END_SRC
+
+We can also make the non-build in `range` function like:
+
+#+BEGIN_SRC typescript
+  function range(start, end, step=1) {
+    return {
+      [Symbol.iterator]() { // Allows to use in regular for loop
+	return this;
+	},
+      next() {             
+	if (start < end) {
+	  start = start + step;
+	  return { value: start, done: false };
+	}
+	return { done: true, value: end };
+      }
+    }
+  }
+
+  for (const n of range(0, 20, 5)) {   // logs: 5, 10, 15, 20 on each line
+    console.log(n);
+  }
+
+  console.log([...range(0, 10)]); // logs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+#+END_SRC
+
+
+With iterator you start with a collection and write some code that
+determines how to get from the beginning to the end.
+
+It is a pull-based systems.
 ** Observer
 ** Mediator
 ** State
