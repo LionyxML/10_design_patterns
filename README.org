@@ -390,5 +390,76 @@ middleware system.
 It provides separation of concerns and eliminates code duplication.
 
 ** State
+An object behaves different based on a finite number of states.
 
+In your code you possible use conditional logic or switch statements
+to handle a bunch of possibilities base on the state or data on your
+application.
 
+Example:
+
+#+BEGIN_SRC typescript
+  class Human {
+    think(mood) {
+      switch(mood) { // Switch Hell
+	case "happy":
+	  return "I am happy! :)";
+
+	case "sad":
+	  return "I am sad! :(";
+
+	default:
+	  return "I am neutral :|";
+      }
+    }
+  }
+#+END_SRC
+
+The problem is that this kind of code, usually don't scale very well.
+
+The state pattern allows you to start with one base class then provide different functionality based on it internal state.
+
+The idea comes from **Finite State Machines** and libraries like XState.
+
+Another way to go with the provided example:
+
+#+BEGIN_SRC typescript
+  interface State {
+    think(): string;
+  }
+
+  class HappyState implements State {
+    think() {
+      return "I am happy! :)";
+    }
+  }
+
+  class SadState implements State {
+    think() {
+      return "I am sad! :(";
+    }
+  }
+
+  class NeutralState implements State {
+    think() {
+      return "I am neutral! :|";
+    }
+  }
+
+  class Human {
+    state: State;
+
+    constructor() {
+      this.state = new HappyState();
+    }
+
+    think() {
+      return this.state.think();
+    }
+
+    changeState(state) {
+      this.state = state;
+    }
+
+  }
+#+END_SRC
