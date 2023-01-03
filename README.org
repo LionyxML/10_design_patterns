@@ -246,7 +246,7 @@ The way Vue does is substituting the original object with a proxy.
       return target[key];
     },
     set(target, key, value) {
-      console.log("updating UI...');
+      console.log("updating UI...");
       return Reflect.set(target, key, value);
     },
   });
